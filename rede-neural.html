@@ -1,12 +1,60 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Como a rede neural decide? · Flappy Learning</title><link rel="stylesheet" href="aula.css"></head><body><header><p>LABORATÓRIO DE INTELIGÊNCIA ARTIFICIAL</p><h1>Como a rede neural decide?</h1><p>Manipule cada peso e acompanhe o cálculo da saída.</p><nav aria-label="Navegação"><a href="index.html">Jogo</a><a href="rede-neural.html">1 · Rede neural</a><a href="algoritmo-genetico.html">2 · Algoritmo genético</a><a href="neuroevolucao.html">3 · Combinação</a></nav></header><main><section><h2>Uma rede 2 → 2 → 1, com seis pesos</h2><p>As entradas são x₁ = y do pássaro / altura da tela e x₂ = altura do cano superior / altura da tela. O eixo y cresce para baixo. x₂ marca o topo da abertura, não seu centro. O jogo não fornece velocidade vertical nem distância horizontal à rede.</p><p>Dois neurônios ocultos recebem as duas entradas: quatro conexões. A saída recebe os dois neurônios ocultos: mais duas conexões. Esta implementação não usa bias (termo independente).</p><svg viewBox="0 0 800 245" role="img" aria-label="Duas entradas conectadas a dois neurônios ocultos e uma saída"><g stroke="#8aa6cb" stroke-width="3"><path d="M130 65L390 65 M130 65L390 180 M130 180L390 65 M130 180L390 180 M410 65L680 120 M410 180L680 120"/></g><g fill="#174c91"><circle cx="110" cy="65" r="30"/><circle cx="110" cy="180" r="30"/><circle cx="400" cy="65" r="30"/><circle cx="400" cy="180" r="30"/><circle cx="690" cy="120" r="32"/></g><g fill="white" text-anchor="middle" font-size="19"><text x="110" y="72">x₁</text><text x="110" y="187">x₂</text><text x="400" y="72">h₁</text><text x="400" y="187">h₂</text><text x="690" y="127">s</text></g><g fill="#152540" font-size="17"><text x="225" y="52">w₁</text><text x="235" y="160">w₂</text><text x="295" y="155">w₃</text><text x="225" y="210">w₄</text><text x="535" y="70">w₅</text><text x="535" y="190">w₆</text></g></svg></section><section><h2>Laboratório: mude entradas e pesos</h2><p>Os controles recalculam a rede real de <code>Neuroevolution.js</code>. Os valores iniciais são ilustrativos, não pesos já treinados. A saída não é uma probabilidade calibrada de sucesso.</p><div class="grid"><div id="inputs"></div><div id="weights"></div></div><button id="random">Sortear pesos</button><div id="calc" aria-live="polite"></div><details><summary>Como ler a conta</summary><p>Cada neurônio multiplica suas entradas pelos pesos, soma e aplica σ(z) = 1 / (1 + e⁻ᶻ). Um peso positivo aumenta a soma quando sua entrada cresce; um negativo a reduz. O efeito final depende também dos outros pesos e entradas.</p></details></section><section><h2>Da conta à ação</h2><pre>h₁ = σ(x₁ × w₁ + x₂ × w₂)
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Da tela à decisão de bater asas. · Flappy Learning</title>
+  <link rel="stylesheet" href="aulas/visual.css">
+</head>
+<body>
+<header><div class="bar"><a class="brand" href="index.html">FLAPPY <b>/ LAB</b></a><nav aria-label="Navegação principal"><a href="index.html">Jogo</a><a href="rede-neural.html" aria-current="page">01 · Rede neural</a><a href="algoritmo-genetico.html">02 · Genético</a><a href="neuroevolucao.html">03 · Juntos</a></nav></div></header>
+<main>
+  <div class="intro"><div class="eyebrow">Laboratório 01 · Aprenda vendo acontecer</div><h1>Da tela à decisão de bater asas.</h1><p class="lead">Mova o pássaro e a abertura. Veja os dois números entrarem na rede, atravesse as contas e aplique a saída em um único ciclo do jogo.</p><div class="pills"><span class="pill">Código original da rede</span><span class="pill">Controles por conexão</span><span class="pill">Antes e depois de cada ciclo</span></div></div>
+
+<div class="route"><span class="active">01 · Ler o estado da tela</span><span>02 · Multiplicar pelos pesos</span><span>03 · Decidir e mover</span></div>
+<div class="cols">
+ <section class="card">
+  <div class="head"><h2><span class="number">01</span>O que a rede enxerga?</h2><button id="vision" aria-pressed="false">Ver só as entradas</button></div>
+  <div id="world" class="scene"></div>
+  <div class="legend"><span>Posição y do pássaro</span><span>Topo da abertura</span><span>Contorno tracejado: posição anterior</span></div>
+  <div class="sliders">
+   <label class="control">Posição do pássaro · y <output id="birdOut"></output><input id="birdY" type="range" min="0" max="470" value="250" step="1"></label>
+   <label class="control">Topo da abertura <output id="gapOut"></output><input id="gapY" type="range" min="50" max="342" value="190" step="1"></label>
+   <label class="control">Velocidade vertical antes da ação <output id="velocityOut"></output><input id="velocity" type="range" min="-8" max="8" step="0.1" value="2"></label>
+   <label class="control">Distância visual · x do cano <output id="pipeOut"></output><input id="pipeX" type="range" min="170" max="440" value="330" step="1"></label>
+  </div>
+  <div class="callout">Não há leitura de pixels: o código entrega <strong>duas coordenadas normalizadas</strong>. Mudar a velocidade ou a distância horizontal não muda a saída desta rede.</div>
+ </section>
+ <section class="card">
+  <div class="head"><h2><span class="number">02</span>Dois números, seis pesos</h2><span class="badge">2 → 2 → 1</span></div>
+  <div id="network" class="network"></div>
+  <p class="tiny">Azul: peso positivo · laranja: negativo. Selecione um controle para destacar sua conexão. Não há bias nesta implementação.</p>
+  <div id="weights" class="weight-grid"></div>
+  <div class="controls"><button id="preset">Exemplo inicial</button><button id="randomWeights">Sortear pesos</button><button id="zeroWeights">Zerar saída</button></div>
+  <div id="math" class="formula"></div>
+  <p class="tiny">σ(z) = 1 / (1 + e⁻ᶻ). O valor da saída não é uma probabilidade calibrada de vencer.</p>
+  <div id="decision" class="decision" aria-live="polite"></div>
+ </section>
+</div>
+<section class="card">
+ <div class="head"><h2><span class="number">03</span>Agora aplique a saída à tela</h2><div class="controls"><button class="primary" id="oneFrame">Executar 1 ciclo</button><button id="play">Reproduzir devagar</button><button id="reset">Restaurar cena</button></div></div>
+ <div class="three"><div><div class="split-label">Antes da ação</div><div id="before" class="scene compact"></div></div><div><div class="split-label">Saída → física</div><div id="physics" class="formula"></div><p class="tiny">Velocidade negativa sobe. Positiva desce. Bater asas define v = −6; não soma −6 à velocidade anterior.</p></div><div><div class="split-label">Depois da ação</div><div id="after" class="scene compact"></div></div></div>
+ <p id="frameStatus" class="caption" aria-live="polite">Execute um ciclo para comparar o antes e o depois.</p>
+</section>
+<section class="card"><h2>Quantos frames ela usa?</h2><div class="three"><div><h3>1 estado por decisão</h3><p>A cada <code>Game.update()</code>, cada pássaro vivo calcula uma saída com as coordenadas atuais. Não há histórico de imagens, memória recorrente nem pilha de frames.</p></div><div><h3>60 ciclos/s como alvo</h3><p>No modo 1×, o código pede um intervalo de 1000/60 ms entre atualizações. É uma meta, não uma garantia. 2× pede 120 ciclos/s; “Máxima” remove esse atraso intencional.</p></div><div><h3>Desenho é outro ciclo</h3><p><code>requestAnimationFrame</code> redesenha conforme o navegador. Uma imagem exibida pode reunir várias atualizações. O laboratório roda devagar para permitir observar cada decisão.</p></div></div><details><summary>Por que dividir por 512? O que não entra na rede?</summary><p>512 é a altura da tela original. y = 256 vira x₁ = 0,5. A coordenada refere-se ao topo do pássaro. O cano superior termina no início da abertura, que mede 120 px. A rede não recebe a imagem, a distância horizontal, a gravidade, a velocidade vertical ou o centro da abertura. Antes de existir um cano à frente, x₂ vale zero.</p></details><details><summary>A conta e o trecho real do código</summary><pre class="code">h₁ = σ(x₁ × w₁ + x₂ × w₂)
 h₂ = σ(x₁ × w₃ + x₂ × w₄)
-s  = σ(h₁ × w₅ + h₂ × w₆)
-se s > 0,5: bater asas
-caso contrário: não bater asas</pre><p>Não bater asas não congela o pássaro: a gravidade continua agindo. Os pesos ficam fixos durante a vida de cada indivíduo.</p><h2>Encontre no código</h2><p><a href="Neuroevolution.js">Neuroevolution.js</a>: <code>Network.prototype.compute</code> calcula as somas e ativações. <a href="game.js">game.js</a>: <code>Game.prototype.update</code> prepara as entradas e executa a ação.</p><h2>Experimente em aula</h2><ol><li>Zere w₅ e w₆. Por que a saída fica em 0,5 e não bate asas?</li><li>Use w₅ positivo e w₆ negativo. Varie a altura do pássaro.</li><li>Explique por que uma saída alta não garante atravessar o próximo cano.</li></ol></section></main><footer>Prof. Mateus de Sousa Valente · Material baseado em xviniette/FlappyLearning · Licença MIT</footer><script src="Neuroevolution.js"></script><script>
-const ne=new Neuroevolution({network:[2,[2],1],population:1});const net=ne.nextGeneration()[0];
-function slider(parent,id,text,min,max,step,value){const l=document.createElement('label');l.textContent=text+' ';const i=document.createElement('input');i.type='range';Object.assign(i,{id,min,max,step,value});const o=document.createElement('output');o.htmlFor=id;l.append(i,o);document.getElementById(parent).append(l);i.addEventListener('input',render);}
-slider('inputs','x1','x₁ · Altura do pássaro',0,1,.01,.5);slider('inputs','x2','x₂ · Topo da abertura',0,1,.01,.4);
-[1,-1,-1,1,1,-1].forEach((v,i)=>slider('weights','w'+(i+1),'w'+(i+1),-4,4,.05,v));
-function render(){const vals=['x1','x2','w1','w2','w3','w4','w5','w6'].map(id=>{const e=document.getElementById(id);e.nextElementSibling.value=Number(e.value).toFixed(2);return Number(e.value)});const [a,b,...w]=vals;net.setSave({neurons:[2,2,1],weights:w});const s=net.compute([a,b])[0],h=net.layers[1].neurons;document.getElementById('calc').innerHTML='<h3>Resultado calculado</h3><p>h₁ = σ('+ (a*w[0]+b*w[1]).toFixed(3)+') = '+h[0].value.toFixed(4)+'<br>h₂ = σ('+(a*w[2]+b*w[3]).toFixed(3)+') = '+h[1].value.toFixed(4)+'<br>s = σ('+(h[0].value*w[4]+h[1].value*w[5]).toFixed(3)+') = '+s.toFixed(4)+'</p><p class="metric">'+(s>.5?'Bater asas':'Não bater asas')+'</p>';}
-document.getElementById('random').onclick=()=>{for(let i=1;i<=6;i++)document.getElementById('w'+i).value=(Math.random()*2-1).toFixed(2);render()};render();
-</script></body></html>
+s = σ(h₁ × w₅ + h₂ × w₆)
+
+// game.js · Game.prototype.update
+var res = this.gen[i].compute(inputs);
+if (res[0] > 0.5) this.birds[i].flap();
+this.birds[i].update();</pre><p>A rede desta página chama o <code>compute</code> original. A cena é um laboratório com um cano reposicionável e pausa ao colidir. Os pesos iniciais são um exemplo manual, não um modelo treinado.</p></details><p><strong>Experimento:</strong> zere os pesos de saída. O resultado é exatamente 0,5 e não bate asas, porque o teste usa “maior que”, não “maior ou igual”. Depois mantenha as alturas iguais e mude apenas a velocidade: a decisão não muda, mas o movimento muda.</p></section>
+
+</main>
+<footer>Prof. Mateus de Sousa Valente · Base: xviniette/FlappyLearning · Licença MIT · <a href="https://github.com/mateusvalente/FlappyLearning">Código no GitHub</a></footer>
+<script src="Neuroevolution.js"></script>
+<script src="aulas/motor.js"></script>
+<script src="aulas/visuais.js"></script>
+<script src="aulas/neural.js"></script>
+</body>
+</html>
