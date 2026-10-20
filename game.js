@@ -175,7 +175,7 @@ Game.prototype.update = function(){
 			];
 
 			var res = this.gen[i].compute(inputs);
-			if(res > 0.5){
+			if(res[0] > 0.5){
 				this.birds[i].flap();
 			}
 
@@ -266,10 +266,10 @@ Game.prototype.display = function(){
 
 	this.ctx.fillStyle = "white";
 	this.ctx.font="20px Oswald, sans-serif";
-	this.ctx.fillText("Score : "+ this.score, 10, 25);
-	this.ctx.fillText("Max Score : "+this.maxScore, 10, 50);
-	this.ctx.fillText("Generation : "+this.generation, 10, 75);
-	this.ctx.fillText("Alive : "+this.alives+" / "+Neuvol.options.population, 10, 100);
+	this.ctx.fillText("Pontuação: "+ this.score, 10, 25);
+	this.ctx.fillText("Recorde: "+this.maxScore, 10, 50);
+	this.ctx.fillText("Geração: "+this.generation, 10, 75);
+	this.ctx.fillText("Vivos: "+this.alives+" / "+Neuvol.options.population, 10, 100);
 
 	var self = this;
 	requestAnimationFrame(function(){
