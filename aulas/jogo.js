@@ -2,14 +2,14 @@
   'use strict';
   const $ = id => document.getElementById(id);
   let lastKey = '';
-  window.labPaused = false;
+  window.labPaused = true;
   window.labStepRequested = false;
   $('pauseGame').onclick = () => { window.labPaused = !window.labPaused; };
   $('stepGame').onclick = () => { window.labPaused = true; window.labStepRequested = true; };
   $('gameSpeed').onchange = () => speed($('gameSpeed').value);
   function render() {
     if (window.game && game.gen.length) {
-      $('pauseGame').textContent = window.labPaused ? 'Continuar' : 'Pausar';
+      $('pauseGame').textContent = window.labPaused ? (game.score === 0 && game.generation === 1 ? 'Começar simulação' : 'Continuar') : 'Pausar';
       $('runState').textContent = window.labPaused ? 'Pausado para inspeção' : 'Treinando';
       $('liveGeneration').textContent = game.generation;
       $('liveAlive').textContent = game.alives + ' / ' + Neuvol.options.population;

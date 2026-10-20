@@ -2,7 +2,7 @@
 'use strict';
 const $=id=>document.getElementById(id),fmt=Visual.f;
 const initial=[1,-1,-1,1,1,-1];let weights=initial.slice(),sensor=false,frame=0,active=-1,timer=null,ghost=null,previous=null,dead=false;
-const edgeNames=['x₁ → h₁','x₂ → h₁','x₁ → h₂','x₂ → h₂','h₁ → s','h₂ → s'];
+const edgeNames=['E₁ → h₁','E₂ → h₁','E₁ → h₂','E₂ → h₂','h₁ → s','h₂ → s'];
 $('weights').innerHTML=weights.map((w,i)=>`<div class="weight"><label class="control" for="weight${i}">w${i+1}<output id="weightOut${i}">${fmt(w,2)}</output><input id="weight${i}" type="range" min="-4" max="4" step="0.05" value="${w}"></label><small>${edgeNames[i]}</small></div>`).join('');
 function state(){return {y:+$('birdY').value,v:+$('velocity').value,top:+$('gapY').value,x:+$('pipeX').value};}
 let current=state();
