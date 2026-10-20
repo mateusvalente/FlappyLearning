@@ -1,36 +1,30 @@
-# Flappy Learning ([Demo](http://xviniette.github.io/FlappyLearning/))
+# Flappy Learning — laboratório em português
 
-Program that learns to play Flappy Bird by machine learning ([Neuroevolution](http://www.scholarpedia.org/article/Neuroevolution))
+Material didático do Prof. Mateus de Sousa Valente, baseado no projeto de xviniette.
 
-![alt tag](https://github.com/xviniette/FlappyLearning/blob/gh-pages/img/flappy.png?raw=true)
+## Abrir
 
-### [NeuroEvolution.js](http://github.com/xviniette/FlappyLearning/blob/gh-pages/Neuroevolution.js) : Utilization
-```javascript
-// Initialize
-var ne = new Neuroevolution({options});
+Abra `index.html` no navegador ou use um servidor estático (por exemplo, Live Server no VS Code). Não é necessário instalar biblioteca de machine learning. As páginas didáticas funcionam sem CDN.
 
-//Default options values
-var options = {
-    network:[1, [1], 1],    // Perceptron structure
-    population:50,          // Population by generation
-    elitism:0.2,            // Best networks kepts unchanged for the next generation (rate)
-    randomBehaviour:0.2,    // New random networks for the next generation (rate)
-    mutationRate:0.1,       // Mutation rate on the weights of synapses
-    mutationRange:0.5,      // Interval of the mutation changes on the synapse weight
-    historic:0,             // Latest generations saved
-    lowHistoric:false,      // Only save score (not the network)
-    scoreSort:-1,           // Sort order (-1 = desc, 1 = asc)
-    nbChild:1               // number of child by breeding
-}
+- `index.html`: jogo traduzido, com treinamento automático e velocidade ajustável.
+- `rede-neural.html`: laboratório interativo dos seis pesos, usando a implementação real de `Neuroevolution.js`.
+- `algoritmo-genetico.html`: explicação e laboratório de cruzamento e mutação.
+- `neuroevolucao.html`: ciclo completo interativo, mapa do código e roteiro de aula.
 
-//Update options at any time
-ne.set({options});
+## Implementação
 
-// Generate first or next generation
-var generation = ne.nextGeneration();
+Rede [2, [2], 1], sem bias, com sigmoide e seis pesos. Entradas: y do pássaro / altura da tela e altura do cano superior / altura da tela. Saída > 0,5 faz bater asas. Fitness: atualizações de simulação sobrevividas.
 
-//When an network is over -> save this score
-ne.networkScore(generation[x], <score = 0>);
-```
+Algoritmo genético: população 50, elitismo 20%, indivíduos aleatórios 20%, mutação por peso 10%, amplitude 0,5. As configurações dos laboratórios são independentes do treinamento do jogo.
 
-You can see the NeuroEvolution integration in Flappy Bird in [Game.js](http://github.com/xviniette/FlappyLearning/blob/gh-pages/game.js).
+Para modificar o treinamento, edite as opções de `new Neuroevolution` em `game.js` e recarregue a página. A aleatoriedade não é semeada; repita experimentos e não espere melhora em toda geração.
+
+## Créditos e licença
+
+Original: https://github.com/xviniette/FlappyLearning
+
+Fork: https://github.com/mateusvalente/FlappyLearning
+
+Demonstração original: https://xviniette.github.io/FlappyLearning/
+
+Licença MIT, conforme arquivo `License`, preservado no repositório. A rede e o algoritmo genético originais permanecem implementados em JavaScript, sem TensorFlow, Synaptic ou NEAT.
