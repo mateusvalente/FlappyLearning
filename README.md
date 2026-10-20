@@ -50,3 +50,7 @@ node tests/laboratorio.test.cjs
 ```
 
 O teste compara a física com `game.js`, verifica a decisão no limiar 0,5, mutação de 0% e 100% e evolução por 12 gerações com preservação da elite.
+
+## Navegação integrada
+
+As quatro telas usam o mesmo cabeçalho, menu, tema e navegação sequencial. A página inicial também mostra a decisão real de um pássaro (entradas, pesos, saída e física) e permite pausar ou avançar um ciclo. A instrumentação em `game.js` apenas registra os valores para o painel; a rede e os critérios de reprodução permanecem os mesmos.

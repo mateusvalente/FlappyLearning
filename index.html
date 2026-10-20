@@ -1,1 +1,44 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Flappy Learning em português · Flappy Learning</title><link rel="stylesheet" href="aula.css"></head><body><header><p>LABORATÓRIO DE INTELIGÊNCIA ARTIFICIAL</p><h1>Flappy Learning em português</h1><p>Observe uma população de redes neurais aprendendo a jogar por gerações.</p><nav aria-label="Navegação"><a href="index.html">Jogo</a><a href="rede-neural.html">1 · Rede neural</a><a href="algoritmo-genetico.html">2 · Algoritmo genético</a><a href="neuroevolucao.html">3 · Combinação</a></nav></header><main><div class="grid"><section><canvas id="flappy" width="500" height="512" aria-label="Jogo Flappy Bird com treinamento automático"></canvas><p>Velocidade da simulação</p><button onclick="speed(60)">1×</button><button onclick="speed(120)">2×</button><button onclick="speed(180)">3×</button><button onclick="speed(300)">5×</button><button onclick="speed(0)">Máxima</button></section><section><h2>O que está acontecendo?</h2><p>Cada pássaro tem sua própria rede neural. As redes começam com pesos aleatórios e decidem quando bater as asas.</p><ol><li>Todos jogam no mesmo cenário da geração.</li><li>Ao morrer, cada pássaro recebe a pontuação de sobrevivência.</li><li>Quando todos morrem, o algoritmo preserva os melhores, inclui redes aleatórias e cruza e modifica pesos.</li><li>Uma nova geração começa automaticamente.</li></ol><p class="note">Pontuação é o número de atualizações de simulação sobrevividas, não a quantidade de canos ultrapassados.</p><h2>Explore antes de alterar</h2><p>Abra as três páginas pelo menu. Elas mostram os seis pesos, a decisão de bater asas e o processo de evolução.</p><a href="https://github.com/mateusvalente/FlappyLearning">Repositório do projeto</a></section></div></main><footer>Prof. Mateus de Sousa Valente · Material baseado em xviniette/FlappyLearning · Licença MIT</footer><script src="Neuroevolution.js"></script><script src="game.js"></script></body></html>
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Jogo e treinamento · Flappy Learning</title>
+  <link rel="stylesheet" href="aulas/visual.css?v=3">
+</head>
+<body>
+<header><div class="bar"><a class="brand" href="index.html">FLAPPY <b>/ LAB</b></a><nav aria-label="Navegação principal"><a href="index.html" aria-current="page">00 · Jogo</a><a href="rede-neural.html">01 · Rede neural</a><a href="algoritmo-genetico.html">02 · Algoritmo genético</a><a href="neuroevolucao.html">03 · Combinação</a></nav></div></header>
+<main>
+  <div class="intro"><div class="eyebrow">Laboratório 00 · Aprenda vendo acontecer</div><h1>Veja a população aprender a jogar.</h1><p class="lead">Comece pelo jogo real. Acompanhe um pássaro, veja as entradas e a saída da sua rede e pause para entender uma decisão. Depois percorra as três explicações pelo mesmo menu.</p><div class="pills"><span class="pill">50 pássaros · 50 redes</span><span class="pill">Treinamento original</span><span class="pill">Rede + algoritmo genético</span></div></div>
+  <div class="route"><span class="active">00 · Observar o jogo</span><span>01 · Entender a decisão</span><span>02 · Entender a evolução</span><span>03 · Juntar os passos</span></div>
+  <div class="cols">
+    <section class="card">
+      <div class="head"><h2>A população em ação</h2><span class="badge" id="runState">Carregando jogo</span></div>
+      <div class="game-canvas"><canvas id="flappy" width="500" height="512" aria-label="Jogo Flappy Bird com 50 redes neurais aprendendo por gerações"></canvas></div>
+      <div class="controls"><button class="primary" id="pauseGame">Pausar</button><button id="stepGame">Avançar 1 ciclo</button></div>
+      <div class="row"><label for="gameSpeed">Velocidade de simulação</label><select id="gameSpeed"><option value="60">1× · alvo 60 ciclos/s</option><option value="120">2× · alvo 120 ciclos/s</option><option value="180">3× · alvo 180 ciclos/s</option><option value="300">5× · alvo 300 ciclos/s</option><option value="0">Máxima</option></select></div>
+      <div class="stats"><div class="stat"><small>Geração</small><strong id="liveGeneration">—</strong></div><div class="stat"><small>Vivos</small><strong id="liveAlive">—</strong></div><div class="stat"><small>Recorde</small><strong id="liveBest">—</strong></div></div>
+      <p class="caption">Cada geração começa com novos pássaros. A pontuação conta atualizações sobrevividas, não canos. Quando todos morrem, o algoritmo genético produz outra população.</p>
+    </section>
+    <section class="card">
+      <div class="head"><h2>Dentro de uma decisão real</h2><span id="trackedBird" class="badge">Aguardando indivíduo</span></div>
+      <p class="caption">O painel acompanha o primeiro pássaro vivo. Pause para inspecionar os números do último ciclo executado; a identificação muda quando o indivíduo morre.</p>
+      <div id="liveNetwork" class="network"></div>
+      <div class="stats"><div class="stat"><small>x₁ · y / 512</small><strong id="liveX1">—</strong></div><div class="stat"><small>x₂ · topo / 512</small><strong id="liveX2">—</strong></div><div class="stat"><small>Saída da rede</small><strong id="liveOutput">—</strong></div></div>
+      <div id="liveDecision" class="decision">Aguardando cálculo da rede.</div>
+      <div id="livePhysics" class="formula live-formula">Aguardando primeiro ciclo.</div>
+      <div class="callout">A rede decide a ação; o algoritmo genético busca os pesos entre gerações. O jogo entrega duas coordenadas à rede, não uma imagem da tela.</div>
+      <a class="next-link" href="rede-neural.html">Manipular a cena e os seis pesos →</a>
+    </section>
+  </div>
+  <section class="card"><h2>O que muda em cada geração?</h2><div class="three"><div><span class="number">10</span><h3>Melhores redes preservadas</h3><p>O elitismo copia 20% da população. Esses pesos passam intactos para a geração seguinte.</p></div><div><span class="number">10</span><h3>Redes totalmente novas</h3><p>Outros 20% recebem pesos aleatórios, introduzindo comportamentos diferentes.</p></div><div><span class="number">30</span><h3>Filhos dos indivíduos avaliados</h3><p>O cruzamento combina pesos dos pais. Depois, cada peso tem 10% de chance de receber uma mutação de até 0,5 em cada direção.</p></div></div><p class="caption">Os obstáculos são sorteados novamente. Por isso, até uma rede preservada pode obter outra pontuação. Nesta tela, os parâmetros são os do jogo original.</p></section>
+  <section class="card"><h2>Uma prática, quatro telas conectadas</h2><div class="three"><a class="lesson-card" href="rede-neural.html"><span class="eyebrow">01 · Rede neural</span><h3>Como a tela vira uma ação?</h3><p>Mova o pássaro, veja as entradas, altere os pesos e compare o antes e o depois de uma decisão.</p><strong>Explorar a rede →</strong></a><a class="lesson-card" href="algoritmo-genetico.html"><span class="eyebrow">02 · Algoritmo genético</span><h3>De onde vêm os pesos?</h3><p>Observe a avaliação, a seleção, a herança de cada peso e as alterações por mutação.</p><strong>Explorar a evolução →</strong></a><a class="lesson-card" href="neuroevolucao.html"><span class="eyebrow">03 · Combinação</span><h3>Como tudo funciona junto?</h3><p>Avance por oito etapas, do estado da tela à física e à formação de uma nova população.</p><strong>Acompanhar passo a passo →</strong></a></div></section>
+<div class="lesson-pagination" aria-label="Sequência da aula"><span>Comece observando o jogo.</span><span>1 de 4 telas</span><a href="rede-neural.html">Rede neural →</a></div>
+</main>
+<footer>Prof. Mateus de Sousa Valente · Base: xviniette/FlappyLearning · Licença MIT · <a href="https://github.com/mateusvalente/FlappyLearning">Código no GitHub</a></footer>
+<script src="Neuroevolution.js"></script>
+<script src="aulas/visuais.js?v=3"></script>
+<script src="game.js?v=3"></script>
+<script src="aulas/jogo.js?v=3"></script>
+</body>
+</html>

@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Um ciclo por vez. Uma geração por vez. · Flappy Learning</title>
-  <link rel="stylesheet" href="aulas/visual.css">
+  <link rel="stylesheet" href="aulas/visual.css?v=3">
 </head>
 <body>
-<header><div class="bar"><a class="brand" href="index.html">FLAPPY <b>/ LAB</b></a><nav aria-label="Navegação principal"><a href="index.html">Jogo</a><a href="rede-neural.html">01 · Rede neural</a><a href="algoritmo-genetico.html">02 · Genético</a><a href="neuroevolucao.html" aria-current="page">03 · Juntos</a></nav></div></header>
+<header><div class="bar"><a class="brand" href="index.html">FLAPPY <b>/ LAB</b></a><nav aria-label="Navegação principal"><a href="index.html">00 · Jogo</a><a href="rede-neural.html">01 · Rede neural</a><a href="algoritmo-genetico.html">02 · Algoritmo genético</a><a href="neuroevolucao.html" aria-current="page">03 · Combinação</a></nav></div></header>
 <main>
   <div class="intro"><div class="eyebrow">Laboratório 03 · Aprenda vendo acontecer</div><h1>Um ciclo por vez. Uma geração por vez.</h1><p class="lead">Siga um pássaro da leitura do estado até o movimento. Depois acompanhe a população terminar e o algoritmo genético construir a próxima geração.</p><div class="pills"><span class="pill">Microetapas com valores reais</span><span class="pill">Evolução pela implementação original</span><span class="pill">Pista controlada para comparar</span></div></div>
 
@@ -16,11 +16,12 @@
 <div class="cols"><section class="card"><h2>Da avaliação à próxima população</h2><div id="generationTable" class="table-wrap"></div><p class="tiny">Quando a avaliação termina, o botão “Próxima etapa” primeiro mostra a classificação. Só depois ele cria a geração seguinte. Os novos pesos ficam fixos até acabar a vida do indivíduo.</p></section><section class="card"><h2>Histórico do experimento</h2><div id="historyChart"></div><div class="legend"><span>Média</span><span style="color:#067d78">Melhor fitness (linha verde)</span></div><div id="log" class="trace" aria-live="off"></div></section></div>
 <section class="card"><h2>O que acontece dentro de cada atualização?</h2><div class="three"><div><h3>1. Decisão individual</h3><p>Ler duas alturas atuais, multiplicar por pesos, aplicar a sigmoide e comparar a saída com 0,5. Cada pássaro tem pesos próprios; todos usam a mesma arquitetura.</p></div><div><h3>2. Ambiente e fitness</h3><p>Aplicar o impulso se houver, somar 0,3 à velocidade vertical e atualizar y. Verificar colisões, registrar fitness dos mortos, mover canos e avançar o contador.</p></div><div><h3>3. Reprodução coletiva</h3><p>Quando todos terminarem, ordenar os genomas. Copiar elites, introduzir redes aleatórias, cruzar e mutar os demais. Reiniciar pássaros e pista.</p></div></div><details><summary>Esta animação está treinando de verdade?</summary><p>Sim. A avaliação executa a física e a rede. A criação de gerações chama <code>nextGeneration</code> da implementação original. O diagrama e o painel mostram os valores usados, não pontuações inventadas. Para permitir comparação, usamos 10 indivíduos, pista repetível e limite de 720 ciclos. Ao atingir o limite, os sobreviventes recebem fitness 720. O original usa 50 e não limita a duração.</p></details><details><summary>Ela se lembra dos frames anteriores? Isso é reforço?</summary><p>A rede recebe só o estado atual e não tem memória interna. A velocidade permanece no ambiente físico, mas não é uma entrada da rede. O treinamento aqui é neuroevolução: o AG busca pesos usando fitness. Não há backpropagation, Q-learning ou PPO.</p></details><details><summary>Uma elite sempre melhora a pontuação?</summary><p>Preservar pesos mantém a política. Na pista determinística deste laboratório, com as mesmas condições iniciais, a mesma política produz o mesmo resultado. No jogo original, novos canos são sorteados: a mesma rede pode obter outra pontuação. Nem cruzamento nem mutação garantem melhoria.</p></details></section>
 
+<div class="lesson-pagination" aria-label="Sequência da aula"><a href="algoritmo-genetico.html">← Algoritmo genético</a><span>4 de 4 telas</span><a href="index.html">Jogo →</a></div>
 </main>
 <footer>Prof. Mateus de Sousa Valente · Base: xviniette/FlappyLearning · Licença MIT · <a href="https://github.com/mateusvalente/FlappyLearning">Código no GitHub</a></footer>
 <script src="Neuroevolution.js"></script>
-<script src="aulas/motor.js"></script>
-<script src="aulas/visuais.js"></script>
-<script src="aulas/combinacao.js"></script>
+<script src="aulas/motor.js?v=3"></script>
+<script src="aulas/visuais.js?v=3"></script>
+<script src="aulas/combinacao.js?v=3"></script>
 </body>
 </html>

@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Os pesos nascem. O jogo os avalia. · Flappy Learning</title>
-  <link rel="stylesheet" href="aulas/visual.css">
+  <link rel="stylesheet" href="aulas/visual.css?v=3">
 </head>
 <body>
-<header><div class="bar"><a class="brand" href="index.html">FLAPPY <b>/ LAB</b></a><nav aria-label="Navegação principal"><a href="index.html">Jogo</a><a href="rede-neural.html">01 · Rede neural</a><a href="algoritmo-genetico.html" aria-current="page">02 · Genético</a><a href="neuroevolucao.html">03 · Juntos</a></nav></div></header>
+<header><div class="bar"><a class="brand" href="index.html">FLAPPY <b>/ LAB</b></a><nav aria-label="Navegação principal"><a href="index.html">00 · Jogo</a><a href="rede-neural.html">01 · Rede neural</a><a href="algoritmo-genetico.html" aria-current="page">02 · Algoritmo genético</a><a href="neuroevolucao.html">03 · Combinação</a></nav></div></header>
 <main>
   <div class="intro"><div class="eyebrow">Laboratório 02 · Aprenda vendo acontecer</div><h1>Os pesos nascem. O jogo os avalia.</h1><p class="lead">Acompanhe uma população no mesmo cenário. Veja quem sobrevive, de onde vem cada peso do filho e por que uma mutação precisa ser testada.</p><div class="pills"><span class="pill">População visível</span><span class="pill">Sorteios e alterações explícitos</span><span class="pill">Pais e filho na mesma pista</span></div></div>
 
@@ -23,11 +23,12 @@ se r_mutação ≤ taxa:
     Δ = r_variação × amplitude × 2 − amplitude
     peso novo = peso após cruzamento + Δ</pre><details><summary>O que é real e o que foi controlado neste laboratório?</summary><p>A rede, o cruzamento e a mutação usam <code>Neuroevolution.js</code>. A física segue o jogo. Para comparar com justiça e repetir em aula, esta página usa uma sequência fixa de canos e limita cada teste a 720 ciclos; “limite” indica teste encerrado sem colisão. O jogo original sorteia os canos e não tem esse limite. Modificar os controles desta página não altera o jogo principal.</p></details><p><strong>Experimento:</strong> compare 0%, 10% e 100% de mutação. Mesmo um filho de dois pais bons pode jogar pior. O AG busca bons pesos por tentativa, avaliação e reprodução; não resolve uma equação que revela os pesos ideais.</p></section>
 
+<div class="lesson-pagination" aria-label="Sequência da aula"><a href="rede-neural.html">← Rede neural</a><span>3 de 4 telas</span><a href="neuroevolucao.html">Combinação →</a></div>
 </main>
 <footer>Prof. Mateus de Sousa Valente · Base: xviniette/FlappyLearning · Licença MIT · <a href="https://github.com/mateusvalente/FlappyLearning">Código no GitHub</a></footer>
 <script src="Neuroevolution.js"></script>
-<script src="aulas/motor.js"></script>
-<script src="aulas/visuais.js"></script>
-<script src="aulas/genetico.js"></script>
+<script src="aulas/motor.js?v=3"></script>
+<script src="aulas/visuais.js?v=3"></script>
+<script src="aulas/genetico.js?v=3"></script>
 </body>
 </html>

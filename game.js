@@ -155,6 +155,14 @@ Game.prototype.start = function(){
 }
 
 Game.prototype.update = function(){
+	// Controles da aula: a pausa mantém um único ciclo de agendamento ativo.
+	if (window.labPaused && !window.labStepRequested) {
+		var pausedGame = this;
+		setTimeout(function(){ pausedGame.update(); }, 50);
+		return;
+	}
+	window.labStepRequested = false;
+	this.lastDecisions = this.lastDecisions || [];
 	this.backgroundx += this.backgroundSpeed;
 	var nextHoll = 0;
 	if(this.birds.length > 0){
@@ -174,12 +182,22 @@ Game.prototype.update = function(){
 			nextHoll
 			];
 
+			var yBefore = this.birds[i].y;
+			var vBefore = this.birds[i].gravity;
 			var res = this.gen[i].compute(inputs);
 			if(res[0] > 0.5){
 				this.birds[i].flap();
 			}
 
 			this.birds[i].update();
+			// Observação da decisão: não altera pesos, física nem avaliação.
+			this.lastDecisions[i] = {
+				generation: this.generation, frame: this.score,
+				inputs: inputs.slice(), output: res[0],
+				hidden: this.gen[i].layers[1].neurons.map(function(n){ return n.value; }),
+				yBefore: yBefore, vBefore: vBefore,
+				yAfter: this.birds[i].y, vAfter: this.birds[i].gravity
+			};
 			if(this.birds[i].isDead(this.height, this.pipes)){
 				this.birds[i].alive = false;
 				this.alives--;

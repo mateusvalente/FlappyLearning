@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Da tela à decisão de bater asas. · Flappy Learning</title>
-  <link rel="stylesheet" href="aulas/visual.css">
+  <link rel="stylesheet" href="aulas/visual.css?v=3">
 </head>
 <body>
-<header><div class="bar"><a class="brand" href="index.html">FLAPPY <b>/ LAB</b></a><nav aria-label="Navegação principal"><a href="index.html">Jogo</a><a href="rede-neural.html" aria-current="page">01 · Rede neural</a><a href="algoritmo-genetico.html">02 · Genético</a><a href="neuroevolucao.html">03 · Juntos</a></nav></div></header>
+<header><div class="bar"><a class="brand" href="index.html">FLAPPY <b>/ LAB</b></a><nav aria-label="Navegação principal"><a href="index.html">00 · Jogo</a><a href="rede-neural.html" aria-current="page">01 · Rede neural</a><a href="algoritmo-genetico.html">02 · Algoritmo genético</a><a href="neuroevolucao.html">03 · Combinação</a></nav></div></header>
 <main>
   <div class="intro"><div class="eyebrow">Laboratório 01 · Aprenda vendo acontecer</div><h1>Da tela à decisão de bater asas.</h1><p class="lead">Mova o pássaro e a abertura. Veja os dois números entrarem na rede, atravesse as contas e aplique a saída em um único ciclo do jogo.</p><div class="pills"><span class="pill">Código original da rede</span><span class="pill">Controles por conexão</span><span class="pill">Antes e depois de cada ciclo</span></div></div>
 
@@ -50,11 +50,12 @@ var res = this.gen[i].compute(inputs);
 if (res[0] > 0.5) this.birds[i].flap();
 this.birds[i].update();</pre><p>A rede desta página chama o <code>compute</code> original. A cena é um laboratório com um cano reposicionável e pausa ao colidir. Os pesos iniciais são um exemplo manual, não um modelo treinado.</p></details><p><strong>Experimento:</strong> zere os pesos de saída. O resultado é exatamente 0,5 e não bate asas, porque o teste usa “maior que”, não “maior ou igual”. Depois mantenha as alturas iguais e mude apenas a velocidade: a decisão não muda, mas o movimento muda.</p></section>
 
+<div class="lesson-pagination" aria-label="Sequência da aula"><a href="index.html">← Jogo</a><span>2 de 4 telas</span><a href="algoritmo-genetico.html">Algoritmo genético →</a></div>
 </main>
 <footer>Prof. Mateus de Sousa Valente · Base: xviniette/FlappyLearning · Licença MIT · <a href="https://github.com/mateusvalente/FlappyLearning">Código no GitHub</a></footer>
 <script src="Neuroevolution.js"></script>
-<script src="aulas/motor.js"></script>
-<script src="aulas/visuais.js"></script>
-<script src="aulas/neural.js"></script>
+<script src="aulas/motor.js?v=3"></script>
+<script src="aulas/visuais.js?v=3"></script>
+<script src="aulas/neural.js?v=3"></script>
 </body>
 </html>
